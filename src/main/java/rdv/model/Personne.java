@@ -5,11 +5,13 @@ import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -35,7 +37,8 @@ public abstract class Personne {
 	@Column(name = "email")
 	private String mail;
 	@Column(name = "login")
-	@OneToOne(name = "login_id", targetEntity = Login.class)
+	@OneToOne
+	@JoinColumn(name = "username", foreignKey = @ForeignKey(name = "login_id_personne_fk"))
 	private Login login;
 	@Version
 	private int version;
