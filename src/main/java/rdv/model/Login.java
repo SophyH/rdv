@@ -25,6 +25,8 @@ public class Login {
 	//@Length(min=8, message = "8 caractères minimum") avec Validator
 	//@Length(max=15, message = "15 caractères maximum") avec Validator
 	private String password;
+	
+	private Personne personne;
 
 	@Column(name = "activation")
 	private boolean enable;
