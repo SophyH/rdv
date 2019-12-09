@@ -16,8 +16,8 @@ public class Praticien extends Personne {
 	private Set<Specialite> specialites;
 	@OneToMany(mappedBy = "praticien")
 	private Set<Disponibilite> disponibilites;
-	@OneToMany(mappedBy = "praticien")
-	private Set<Adresse> adresses;
+	@OneToMany(mappedBy = "key.praticien")
+	private Set<PraticienAdresse> praticienAdresses;
 
 	public Praticien() {
 		super();
@@ -47,12 +47,12 @@ public class Praticien extends Personne {
 		this.disponibilites = disponibilites;
 	}
 
-	public Set<Adresse> getAdresses() {
-		return adresses;
+	public Set<PraticienAdresse> getPraticienAdresses() {
+		return praticienAdresses;
 	}
 
-	public void setAdresses(Set<Adresse> adresses) {
-		this.adresses = adresses;
+	public void setPraticienAdresses(Set<PraticienAdresse> praticienAdresses) {
+		this.praticienAdresses = praticienAdresses;
 	}
 
 }
