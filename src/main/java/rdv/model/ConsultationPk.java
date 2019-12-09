@@ -35,5 +35,36 @@ public class ConsultationPk implements Serializable{
 	public void setPraticien(Praticien praticien) {
 		this.praticien = praticien;
 	}
-		
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((patient == null) ? 0 : patient.hashCode());
+		result = prime * result + ((praticien == null) ? 0 : praticien.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ConsultationPk other = (ConsultationPk) obj;
+		if (patient == null) {
+			if (other.patient != null)
+				return false;
+		} else if (!patient.equals(other.patient))
+			return false;
+		if (praticien == null) {
+			if (other.praticien != null)
+				return false;
+		} else if (!praticien.equals(other.praticien))
+			return false;
+		return true;
+	}
+			
 }
