@@ -10,7 +10,7 @@ import javax.persistence.OneToMany;
 @DiscriminatorValue("Pa")
 public class Patient extends Personne {
 
-	@OneToMany(mappedBy = "patient")
+	@OneToMany(mappedBy = "key.patient")
 	private Set<Consultation> consultations;
 
 	public Patient() {

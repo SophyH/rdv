@@ -8,31 +8,31 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
 @Entity
-@Table(name="user_role")
-@SequenceGenerator(name="seqUserRole", sequenceName = "seq_user_role", initialValue = 1)
+@Table(name = "user_role")
+@SequenceGenerator(name = "seqUserRole", sequenceName = "seq_user_role", initialValue = 1)
 public class UserRole {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqUserRole")
 	@Column(name = "id_user_role")
 	private Integer id;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role")
 	private Role role;
-	
-	@JoinColumn(name="username")
-	@Column(name = "username")
+	@ManyToOne
+	@JoinColumn(name = "username")
 	private Login login;
-	
+
 	@Version
 	private Integer version;
-	
+
 	public UserRole() {
 		super();
 	}

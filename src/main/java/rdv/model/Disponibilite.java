@@ -32,7 +32,7 @@ public class Disponibilite {
 	private Jour jour;
 	@Column(name = "duree_disponibilite", length = 100)
 	private Date duree;
-	@OneToMany(mappedBy = "")
+	@OneToMany(mappedBy = "disponibilite")
 	@Column(name = "creneaux_disponibilite", length = 100)
 	private Set<Creneau> creneaux;
 	@ManyToOne
