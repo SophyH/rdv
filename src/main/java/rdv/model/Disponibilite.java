@@ -1,6 +1,5 @@
 package rdv.model;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
@@ -16,8 +15,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "disponibilite")
@@ -35,7 +32,7 @@ public class Disponibilite {
 	private Jour jour;
 	@Column(name = "duree_disponibilite", length = 100)
 	private Date duree;
-	@OneToMany(mappedBy = "creneau")
+	@OneToMany(mappedBy = "")
 	@Column(name = "creneaux_disponibilite", length = 100)
 	private Set<Creneau> creneaux;
 	@ManyToOne
@@ -43,26 +40,31 @@ public class Disponibilite {
 	private Praticien praticien;
 	@Version
 	private int version;
-	
+
 	public Disponibilite() {
 		super();
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
 	public Date getHdebut() {
 		return hdebut;
 	}
+
 	public void setHdebut(Date hdebut) {
 		this.hdebut = hdebut;
 	}
+
 	public Date getHfin() {
 		return hfin;
 	}
+
 	public void setHfin(Date hfin) {
 		this.hfin = hfin;
 	}
@@ -86,15 +88,19 @@ public class Disponibilite {
 	public Date getDuree() {
 		return duree;
 	}
+
 	public void setDuree(Date duree) {
 		this.duree = duree;
 	}
+
 	public Set<Creneau> getCreneaux() {
 		return creneaux;
 	}
+
 	public void setCreneaux(Set<Creneau> creneaux) {
 		this.creneaux = creneaux;
 	}
+
 	public int getVersion() {
 		return version;
 	}
@@ -110,6 +116,7 @@ public class Disponibilite {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -127,5 +134,4 @@ public class Disponibilite {
 		return true;
 	}
 
-	
 }
