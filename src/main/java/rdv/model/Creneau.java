@@ -24,13 +24,12 @@ public class Creneau {
 	private Integer id;
 	@Column(name = "heure_debut_creneau")
 	private Date heureDebut;
-	@OneToOne
-	@JoinColumn(name = "consultation_id_creneau", foreignKey = @ForeignKey(name = "consultation_id_creneau_fk"))
+	@OneToOne(mappedBy = "creneau")
 	private Consultation consultation;
 	@Version
-	private int version;
+	private int version; 
 	
-	public Creneau() {
+	public Creneau() { 
 		
 	}
 	
