@@ -36,7 +36,6 @@ public abstract class Personne {
 	private String nom;
 	@Column(name = "email")
 	private String mail;
-	@Column(name = "login")
 	@OneToOne
 	@JoinColumn(name = "username", foreignKey = @ForeignKey(name = "login_id_personne_fk"))
 	private Login login;
