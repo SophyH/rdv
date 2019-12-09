@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -26,6 +27,7 @@ public class Login {
 	//@Length(max=15, message = "15 caractères maximum") avec Validator
 	private String password;
 	
+	@OneToOne(mappedBy = "login")
 	private Personne personne;
 
 	@Column(name = "activation")
