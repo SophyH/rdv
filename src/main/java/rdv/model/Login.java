@@ -2,25 +2,39 @@ package rdv.model;
 
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+//import org.hibernate.validator.constraints.Length;
+
 @Entity
 @Table(name = "login")
 public class Login {
-	
+
 	@Id
+	@Column(name = "username", length = 100)
+//	@Length(min=3, message = "3 caractères minimum") 
+//	@Length(max=3, message = "100 caractères maximum") 
 	private String username;
+	
+	@Column(name = "password", length = 15, nullable = false)
+	//@Length(min=8, message = "8 caractères minimum") avec Validator
+	//@Length(max=15, message = "15 caractères maximum") avec Validator
 	private String password;
+
+	@Column(name = "activation")
 	private boolean enable;
+
 	@OneToMany(mappedBy = "login")
 	private Set<UserRole> roles;
+
 	@Version
 	private Integer version;
-	
+
 	public Login() {
 		super();
 	}
@@ -89,5 +103,5 @@ public class Login {
 			return false;
 		return true;
 	}
-	
+
 }

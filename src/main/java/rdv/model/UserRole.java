@@ -1,5 +1,6 @@
 package rdv.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -18,11 +19,17 @@ public class UserRole {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqUserRole")
+	@Column(name = "id_user_role")
 	private Integer id;
+	
 	@Enumerated(EnumType.STRING)
+	@Column(name = "role")
 	private Role role;
+	
 	@JoinColumn(name="username")
+	@Column(name = "username")
 	private Login login;
+	
 	@Version
 	private Integer version;
 	
