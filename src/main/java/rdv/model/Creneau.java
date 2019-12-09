@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -26,6 +27,9 @@ public class Creneau {
 	private Date heureDebut;
 	@OneToOne(mappedBy = "creneau")
 	private Consultation consultation;
+	@ManyToOne
+	@JoinColumn(name = "id_disponibilite_creneau", foreignKey = @ForeignKey(name = "creneau_id_disponibilite_fk"))
+	private Disponibilite disponibilite;
 	@Version
 	private int version; 
 	
@@ -33,11 +37,12 @@ public class Creneau {
 		
 	}
 	
-	public Creneau(Integer id, Date heureDebut, Consultation consultation, int version) {
+	public Creneau(Integer id, Date heureDebut, Consultation consultation, Disponibilite disponibilite, int version) {
 		super();
 		this.id = id;
 		this.heureDebut = heureDebut;
 		this.consultation = consultation;
+		this.disponibilite = disponibilite;
 		this.version = version;
 	}
 
@@ -62,6 +67,14 @@ public class Creneau {
 		this.consultation = consultation;
 	}
 		
+	public Disponibilite getDisponibilite() {
+		return disponibilite;
+	}
+
+	public void setDisponibilite(Disponibilite disponibilite) {
+		this.disponibilite = disponibilite;
+	}
+
 	public int getVersion() {
 		return version;
 	}
