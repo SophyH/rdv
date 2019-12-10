@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import rdv.model.Patient;
 import rdv.model.Personne;
 import rdv.model.Praticien;
 import rdv.model.jsonViews.JsonViews;
@@ -49,8 +50,8 @@ public class PersonneRestController {
 		}
 	}
 
-	@JsonView(JsonViews.Common.class)
-	@GetMapping("/{id}")
+	@JsonView(JsonViews.PersonneWithAll.class)
+	@GetMapping("/id/{id}")
 	public ResponseEntity<Personne> findById(@PathVariable("id") Integer id) {
 		return findByKey(id);
 	}
@@ -63,14 +64,14 @@ public class PersonneRestController {
 
 	@JsonView(JsonViews.PersonneWithAll.class)
 	@GetMapping("/praticiens")
-	public ResponseEntity<List<Personne>> findAllPraticien() {
-		return new ResponseEntity<List<Personne>>(personneRepository.findAll(), HttpStatus.OK);
+	public ResponseEntity<List<Praticien>> findAllPraticien() {
+		return new ResponseEntity<>(personneRepository.findAllPraticien(), HttpStatus.OK);
 	}
 
-	@JsonView(JsonViews.PatientWithAll.class)
+	@JsonView(JsonViews.PersonneWithAll.class)
 	@GetMapping("/patients")
-	public ResponseEntity<List<Personne>> findAllPatient() {
-		return new ResponseEntity<List<Personne>>(personneRepository.findAll(), HttpStatus.OK);
+	public ResponseEntity<List<Patient>> findAllPatient() {
+		return new ResponseEntity<>(personneRepository.findAllPatient(), HttpStatus.OK);
 	}
 
 	@JsonView(JsonViews.PersonneWithAll.class)
@@ -95,16 +96,16 @@ public class PersonneRestController {
 		}
 	}
 
-	@JsonView(JsonViews.PersonneWithAll.class)
-	@GetMapping("/praticiens/specialite/{specialite}/ville/{ville}")
-	public ResponseEntity<List<Praticien>> findBySpecialiteAndVille(@PathVariable("specialite") String specialite,
-			@PathVariable("ville") String ville) {
-		List<Praticien> list = personneRepository.findAllPraticienWithAllBySpecialiteAndVille(specialite, ville);
-		if (list.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		} else {
-			return new ResponseEntity<>(list, HttpStatus.OK);
-		}
-	}
+//	@JsonView(JsonViews.PersonneWithAll.class)
+//	@GetMapping("/praticiens/{specialite}&{ville}")
+//	public ResponseEntity<List<Praticien>> findBySpecialiteAndVille(@PathVariable("specialite") String specialite,
+//			@PathVariable("ville") String ville) {
+//		List<Praticien> list = personneRepository.findAllPraticienWithAllBySpecialiteAndVille(specialite, ville);
+//		if (list.isEmpty()) {
+//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//		} else {
+//			return new ResponseEntity<>(list, HttpStatus.OK);
+//		}
+//	}
 
 }
