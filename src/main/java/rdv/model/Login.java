@@ -83,6 +83,14 @@ public class Login {
 		this.version = version;
 	}
 
+	public Personne getPersonne() {
+		return personne;
+	}
+
+	public void setPersonne(Personne personne) {
+		this.personne = personne;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
