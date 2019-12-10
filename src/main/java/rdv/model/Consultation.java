@@ -17,15 +17,23 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
+import rdv.model.jsonViews.JsonViews;
+
 @Entity
 @Table(name = "consultation")
 public class Consultation {
+	@JsonView(JsonViews.Common.class)
 	@EmbeddedId
 	private ConsultationPk key;
+	@JsonView(JsonViews.Common.class)
 	@Column(name = "date_consultation")
 	private Date date;
+	@JsonView(JsonViews.Common.class)
 	@Column(name = "motif_consultation")
 	private String motif;
+	@JsonView(JsonViews.Common.class)
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status")
 	private Status status;
