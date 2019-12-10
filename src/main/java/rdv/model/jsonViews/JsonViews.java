@@ -23,8 +23,20 @@ public class JsonViews {
 
 	};
 	
-	public static class PraticiensWithAdresse{
+	public static class PraticiensWithAdresse extends Common{
 		
-	}
+	};
+	
+	public static class DisponibiliteWithCreneau extends Common{
+		
+	};
+	
+	public static class DisponibiliteWithPraticien extends Common{
+		
+	};
+	
+	public static class UneDisponibilite extends Common{
+		
+	};
 
 }

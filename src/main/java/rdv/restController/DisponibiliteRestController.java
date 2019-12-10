@@ -20,8 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import org.springframework.http.HttpHeaders;
 import rdv.model.Disponibilite;
+import rdv.model.jsonViews.JsonViews;
 import rdv.repository.DisponibiliteRepository;
 
 @RequestMapping({"/disponibilite"})
@@ -32,11 +35,13 @@ public class DisponibiliteRestController {
 	@Autowired
 	private DisponibiliteRepository disponibiliteRepository;
 	
+	@JsonView(JsonViews.DisponibiliteWithPraticien.class)
 	@GetMapping({"", "/"})
 	public ResponseEntity<List<Disponibilite>> findAll() {
 		return new ResponseEntity<List<Disponibilite>>(disponibiliteRepository.findAll(), HttpStatus.OK);
 	}
 	
+	@JsonView(JsonViews.DisponibiliteWithPraticien.class)
 	@GetMapping("/{id}")
 	public ResponseEntity<Disponibilite> findById(@PathVariable("id") Integer id){
 		Optional<Disponibilite> opt = disponibiliteRepository.findById(id);
@@ -80,8 +85,12 @@ public class DisponibiliteRestController {
 		//re utilise une disponibilite existante avec ses infos pour repositioner celle qui est updatee
 		Disponibilite dispoEnBase = opt.get();
 		dispoEnBase.setJour(disponibilite.getJour());
+		dispoEnBase.setCreneaux(disponibilite.getCreneaux());
+		dispoEnBase.setDuree(dispoEnBase.getDuree());
+		dispoEnBase.setHdebut(disponibilite.getHdebut());
+		dispoEnBase.setHfin(disponibilite.getHfin());
+		dispoEnBase.setPraticien(disponibilite.getPraticien());
 		disponibiliteRepository.save(dispoEnBase);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
 }
