@@ -102,7 +102,7 @@ public class AdresseRestController {
 //	}
 
 //	@JsonView(JsonViews.AdresseWithPraticien.class)
-//	@GetMapping("/{nompraticien}")
-//	
+//	@GetMapping("/{nompraticien}"){
+//	}
 	
 }
