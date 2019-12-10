@@ -16,7 +16,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Version;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "disponibilite")
@@ -27,8 +31,12 @@ public class Disponibilite {
 	@Column(name = "id_disponibilite")
 	private Integer id;
 	@Column(name = "hdebut_disponibilite", length = 100)
+	@Temporal(TemporalType.TIME)
+	@DateTimeFormat(pattern= "HH:mm:ss")
 	private Date hdebut;
 	@Column(name = "hfin_disponibilite", length = 100)
+	@Temporal(TemporalType.TIME)
+	@DateTimeFormat(pattern= "HH:mm:ss")
 	private Date hfin;
 	@Enumerated(EnumType.STRING)
 	@Column(name = "jour_disponibilite", length = 100)
