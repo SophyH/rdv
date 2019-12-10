@@ -56,9 +56,9 @@ public class PersonneRestController {
 		return findByKey(id);
 	}
 
-	@JsonView(JsonViews.Common.class)
+	@JsonView(JsonViews.PersonneWithAll.class)
 	@GetMapping("/{nom}")
-	public ResponseEntity<List<Personne>> findByNom(@PathVariable("nom") String nom) {
+	public ResponseEntity<List<Personne>> findByNomWithAll(@PathVariable("nom") String nom) {
 		return findByName(nom);
 	}
 
@@ -72,6 +72,40 @@ public class PersonneRestController {
 	@GetMapping("/patients")
 	public ResponseEntity<List<Patient>> findAllPatient() {
 		return new ResponseEntity<List<Patient>>(personneRepository.findAllPatient(), HttpStatus.OK);
+	}
+
+	@JsonView(JsonViews.PersonneWithAll.class)
+	@GetMapping("/praticiens/{ville}")
+	public ResponseEntity<List<Praticien>> findByVille(@PathVariable("ville") String ville) {
+		List<Praticien> list = personneRepository.findAllPraticienWithAllByVille(ville);
+		if (list.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(list, HttpStatus.OK);
+		}
+	}
+
+	@JsonView(JsonViews.PersonneWithAll.class)
+	@GetMapping("/praticiens/{specialite}")
+	public ResponseEntity<List<Praticien>> findBySpecialite(@PathVariable("specialite") String specialite) {
+		List<Praticien> list = personneRepository.findAllPraticienWithAllBySpecialite(specialite);
+		if (list.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(list, HttpStatus.OK);
+		}
+	}
+
+	@JsonView(JsonViews.PersonneWithAll.class)
+	@GetMapping("/praticiens/{specialite}/{ville}")
+	public ResponseEntity<List<Praticien>> findBySpecialiteAndVille(@PathVariable("specialite") String specialite,
+			@PathVariable("ville") String ville) {
+		List<Praticien> list = personneRepository.findAllPraticienWithAllBySpecialiteAndVille(specialite, ville);
+		if (list.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(list, HttpStatus.OK);
+		}
 	}
 
 }
