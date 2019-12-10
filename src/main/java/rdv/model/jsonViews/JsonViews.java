@@ -15,5 +15,9 @@ public class JsonViews {
 
 	public static class AdresseWithPraticien {
 	};
+	
+	public static class LoginWithPersonne{
+		
+	};
 
 }
