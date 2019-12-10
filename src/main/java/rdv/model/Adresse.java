@@ -11,18 +11,24 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
+import rdv.model.jsonViews.JsonViews;
+
 @Entity
 @Table(name = "adresse")
 @SequenceGenerator(name = "seqAdresse", sequenceName = "seq_adresse", initialValue = 100, allocationSize = 1)
 public class Adresse {
-
+	@JsonView(JsonViews.Common.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqAdresse")
 	private Integer id;
+	@JsonView(JsonViews.Common.class)
 	private String adresse;
-	private String cabinet;
+	@JsonView(JsonViews.Common.class)
 	@Column(name = "code_postal", length = 5)
 	private String codePostal;
+	@JsonView(JsonViews.Common.class)
 	private String ville;
 	@OneToMany(mappedBy = "key.adresse")
 	private Set<PraticienAdresse> praticienAdresses;
@@ -53,14 +59,6 @@ public class Adresse {
 
 	public void setAdresse(String adresse) {
 		this.adresse = adresse;
-	}
-
-	public String getCabinet() {
-		return cabinet;
-	}
-
-	public void setCabinet(String cabinet) {
-		this.cabinet = cabinet;
 	}
 
 	public String getCodePostal() {
