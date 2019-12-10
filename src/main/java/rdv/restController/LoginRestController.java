@@ -1,29 +1,25 @@
 package rdv.restController;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-public class LoginRestController {
-
-}
+import rdv.repository.LoginRepository;
 
 ////expliquer à ce service qui a le droit d'aller le chercher (moi j'ai mis j'accepte les requêtes de partout):
 //@CrossOrigin(origins = {"*"})
-//@RestController
-//@RequestMapping("/rest/salle")
-//public class SalleRestController {
-//
-//	//==============================================================
-//	// Exemple:
-////	@GetMapping("/hello")
-////	public ResponseEntity <String> helloWorld(){
-////		return new ResponseEntity<String>("hello world", HttpStatus.OK);
-////	}
-//	//==============================================================
-//	
-//	
-//	@Autowired
-//	private SalleRepository salleRepository;
-//
+@RestController
+@RequestMapping("/login")
+public class LoginRestController {
+
+	@Autowired
+	private LoginRepository loginRepository;
+	
+	
+}
+
+
+
 //	// Pour remonter toutes les salles
 //	@JsonView(JsonViews.Common.class)
 //	@GetMapping({ "", "/" })
@@ -90,4 +86,3 @@ public class LoginRestController {
 //		salleRepository.save(salleEnBase);
 //		return new ResponseEntity<> (HttpStatus.OK);
 //	}
-//}
