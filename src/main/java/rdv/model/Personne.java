@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -37,7 +38,7 @@ public abstract class Personne {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqPersonne")
 	private Integer id;
 	@JsonView(JsonViews.Common.class)
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	@Column(name = "civilite", length = 4)
 	private Civilite civilite;
 	@JsonView(JsonViews.Common.class)
@@ -49,7 +50,7 @@ public abstract class Personne {
 	@JsonView(JsonViews.Common.class)
 	@Column(name = "email")
 	private String mail;
-	@JsonView(JsonViews.PersonneWithLogin.class)
+	@JsonView(JsonViews.PersonneWithAll.class)
 	@OneToOne
 	@JoinColumn(name = "username", foreignKey = @ForeignKey(name = "login_id_personne_fk"))
 	private Login login;
