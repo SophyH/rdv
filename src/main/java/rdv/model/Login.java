@@ -2,34 +2,45 @@ package rdv.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
+
+import com.fasterxml.jackson.annotation.JsonView;
+
+import rdv.model.jsonViews.JsonViews;
 
 //import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "login")
 public class Login {
-
+	@JsonView(JsonViews.Common.class)
 	@Id
 	@Column(name = "username", length = 100)
 //	@Length(min=3, message = "3 caractères minimum") 
 //	@Length(max=3, message = "100 caractères maximum") 
 	private String username;
 
+	@JsonView(JsonViews.Common.class)
 	@Column(name = "password", length = 15, nullable = false)
 	// @Length(min=8, message = "8 caractères minimum") avec Validator
 	// @Length(max=15, message = "15 caractères maximum") avec Validator
 	private String password;
 
+	
 	@OneToOne(mappedBy = "login")
 	private Personne personne;
 
+	
 	@Column(name = "activation")
 	private boolean enable;
-
+	@JsonView(JsonViews.Common.class)
+	
+	@Enumerated(EnumType.STRING)
 	@Column(name = "role")
 	private Role role;
 

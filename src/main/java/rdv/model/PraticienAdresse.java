@@ -4,10 +4,15 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
+import rdv.model.jsonViews.JsonViews;
+
 @Entity
 @Table(name = "praticien_adresse")
 public class PraticienAdresse {
 
+	@JsonView(JsonViews.PersonneWithAll.class)
 	@EmbeddedId
 	private PraticienAdressePk key;
 

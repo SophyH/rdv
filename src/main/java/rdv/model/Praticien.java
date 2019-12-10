@@ -6,16 +6,24 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
+import rdv.model.jsonViews.JsonViews;
+
 @Entity
 @DiscriminatorValue("Dr")
 public class Praticien extends Personne {
 
+	@JsonView(JsonViews.PersonneWithAll.class)
 	@OneToMany(mappedBy = "key.praticien")
 	private Set<Consultation> consultations;
+	@JsonView(JsonViews.PersonneWithAll.class)
 	@OneToMany(mappedBy = "praticien")
 	private Set<Specialite> specialites;
+	@JsonView(JsonViews.PersonneWithAll.class)
 	@OneToMany(mappedBy = "praticien")
 	private Set<Disponibilite> disponibilites;
+	@JsonView(JsonViews.PersonneWithAll.class)
 	@OneToMany(mappedBy = "key.praticien")
 	private Set<PraticienAdresse> praticienAdresses;
 

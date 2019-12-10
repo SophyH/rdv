@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,6 +30,7 @@ public class Disponibilite {
 	private Date hdebut;
 	@Column(name = "hfin_disponibilite", length = 100)
 	private Date hfin;
+	@Enumerated(EnumType.STRING)
 	@Column(name = "jour_disponibilite", length = 100)
 	private Jour jour;
 	@Column(name = "duree_disponibilite", length = 100)
