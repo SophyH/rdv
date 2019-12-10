@@ -30,6 +30,7 @@ public class Adresse {
 	private String codePostal;
 	@JsonView(JsonViews.Common.class)
 	private String ville;
+	@JsonView(JsonViews.PraticiensWithAdresse.class)
 	@OneToMany(mappedBy = "key.adresse")
 	private Set<PraticienAdresse> praticienAdresses;
 

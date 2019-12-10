@@ -22,5 +22,9 @@ public class JsonViews {
 	public static class LoginWithPersonne{
 		
 	};
+	
+	public static class PraticiensWithAdresse{
+		
+	}
 
 }
