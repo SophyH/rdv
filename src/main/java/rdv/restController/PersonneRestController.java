@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import rdv.model.Patient;
 import rdv.model.Personne;
+import rdv.model.Praticien;
 import rdv.repository.PersonneRepository;
 
 @RestController
@@ -52,6 +54,16 @@ public class PersonneRestController {
 	@GetMapping("/{nom}")
 	public ResponseEntity<List<Personne>> findByNom(@PathVariable("nom") String nom) {
 		return findByName(nom);
+	}
+
+	@GetMapping("/praticien")
+	public ResponseEntity<List<Praticien>> findAllPraticien() {
+		return new ResponseEntity<List<Praticien>>(personneRepository.findAllPraticien(), HttpStatus.OK);
+	}
+
+	@GetMapping("/patient")
+	public ResponseEntity<List<Patient>> findAllPatient() {
+		return new ResponseEntity<List<Patient>>(personneRepository.findAllPatient(), HttpStatus.OK);
 	}
 
 }
