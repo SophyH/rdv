@@ -1,11 +1,8 @@
 package rdv.model;
 
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -21,20 +18,20 @@ public class Login {
 //	@Length(min=3, message = "3 caractères minimum") 
 //	@Length(max=3, message = "100 caractères maximum") 
 	private String username;
-	
+
 	@Column(name = "password", length = 15, nullable = false)
-	//@Length(min=8, message = "8 caractères minimum") avec Validator
-	//@Length(max=15, message = "15 caractères maximum") avec Validator
+	// @Length(min=8, message = "8 caractères minimum") avec Validator
+	// @Length(max=15, message = "15 caractères maximum") avec Validator
 	private String password;
-	
+
 	@OneToOne(mappedBy = "login")
 	private Personne personne;
 
 	@Column(name = "activation")
 	private boolean enable;
 
-	@OneToMany(mappedBy = "login")
-	private Set<UserRole> roles;
+	@Column(name = "role")
+	private Role role;
 
 	@Version
 	private Integer version;
@@ -67,12 +64,20 @@ public class Login {
 		this.enable = enable;
 	}
 
-	public Set<UserRole> getRoles() {
-		return roles;
+	public Personne getPersonne() {
+		return personne;
 	}
 
-	public void setRoles(Set<UserRole> roles) {
-		this.roles = roles;
+	public void setPersonne(Personne personne) {
+		this.personne = personne;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	public Integer getVersion() {

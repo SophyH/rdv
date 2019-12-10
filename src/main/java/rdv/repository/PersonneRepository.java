@@ -13,6 +13,9 @@ import rdv.model.Praticien;
 
 public interface PersonneRepository extends JpaRepository<Personne, Integer> {
 
+	@Query("select p from Personne p where p.nom = : nom")
+	public List<Personne> findAllByNom(@Param("nom") String nom);
+
 	@Query("select p from Praticien p left join fetch p.login where p.id = :id")
 	public Optional<Praticien> findPraticienByIdWithLogin(@Param("id") Integer id);
 
@@ -33,24 +36,24 @@ public interface PersonneRepository extends JpaRepository<Personne, Integer> {
 
 	@Query("select p from Praticien p left join fetch p.consultations left join fetch p.specialites left join fetch "
 			+ "p.disponibilites left join fetch p.praticienAdresses pp left join fetch pp.key.adresse")
-	public List<Praticien> findAllWithAll();
+	public List<Praticien> findAllPraticienWithAll();
 
 	@Query("select p from Praticien p left join fetch p.consultations left join fetch p.specialites left join fetch "
 			+ "p.disponibilites left join fetch p.praticienAdresses pp left join fetch pp.key.adresse where p.nom = :nom")
-	public List<Praticien> findAllWithAllByNom(@Param("nom") String nom);
+	public List<Praticien> findAllPraticienWithAllByNom(@Param("nom") String nom);
 
 	@Query("select p from Praticien p left join fetch p.consultations left join fetch p.specialites left join fetch "
 			+ "p.disponibilites left join fetch p.praticienAdresses pp left join fetch pp.key.adresse a where a.ville = :ville")
-	public List<Praticien> findAllWithAllByVille(@Param("ville") String ville);
+	public List<Praticien> findAllPraticienWithAllByVille(@Param("ville") String ville);
 
 	@Query("select p from Praticien p left join fetch p.consultations left join fetch p.specialites s left join fetch "
 			+ "p.disponibilites left join fetch p.praticienAdresses pp left join fetch pp.key.adresse where s.specialite = :specialite")
-	public List<Praticien> findAllWithAllBySpecialite(@Param("specialite") String specialite);
+	public List<Praticien> findAllPraticienWithAllBySpecialite(@Param("specialite") String specialite);
 
 	@Query("select p from Praticien p left join fetch p.consultations left join fetch p.specialites s left join fetch "
 			+ "p.disponibilites left join fetch p.praticienAdresses pp left join fetch pp.key.adresse a where s.specialite = :specialite "
 			+ "and a.ville = :ville")
-	public List<Praticien> findAllWithAllBySpecialiteAndVille(@Param("specialite") String specialite,
+	public List<Praticien> findAllPraticienWithAllBySpecialiteAndVille(@Param("specialite") String specialite,
 			@Param("ville") String ville);
 
 }
