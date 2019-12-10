@@ -13,21 +13,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import rdv.model.Patient;
 import rdv.model.Personne;
 import rdv.model.Praticien;
 import rdv.model.jsonViews.JsonViews;
 import rdv.repository.PersonneRepository;
 
 @RestController
-@RequestMapping({ "/", "" })
+@RequestMapping("/inscrits")
 public class PersonneRestController {
 
 	@Autowired
 	private PersonneRepository personneRepository;
 
-	@JsonView(JsonViews.PersonneWithAll.class)
-	@GetMapping("/inscrits")
+	@JsonView(JsonViews.Common.class)
+	@GetMapping({ "/", "" })
 	public ResponseEntity<List<Personne>> findAll() {
 		return new ResponseEntity<>(personneRepository.findAll(), HttpStatus.OK);
 	}
@@ -64,18 +63,18 @@ public class PersonneRestController {
 
 	@JsonView(JsonViews.PersonneWithAll.class)
 	@GetMapping("/praticiens")
-	public ResponseEntity<List<Praticien>> findAllPraticien() {
-		return new ResponseEntity<List<Praticien>>(personneRepository.findAllPraticien(), HttpStatus.OK);
+	public ResponseEntity<List<Personne>> findAllPraticien() {
+		return new ResponseEntity<List<Personne>>(personneRepository.findAll(), HttpStatus.OK);
 	}
 
-	@JsonView(JsonViews.PersonneWithAll.class)
+	@JsonView(JsonViews.PatientWithAll.class)
 	@GetMapping("/patients")
-	public ResponseEntity<List<Patient>> findAllPatient() {
-		return new ResponseEntity<List<Patient>>(personneRepository.findAllPatient(), HttpStatus.OK);
+	public ResponseEntity<List<Personne>> findAllPatient() {
+		return new ResponseEntity<List<Personne>>(personneRepository.findAll(), HttpStatus.OK);
 	}
 
 	@JsonView(JsonViews.PersonneWithAll.class)
-	@GetMapping("/praticiens/{ville}")
+	@GetMapping("/praticiens/ville/{ville}")
 	public ResponseEntity<List<Praticien>> findByVille(@PathVariable("ville") String ville) {
 		List<Praticien> list = personneRepository.findAllPraticienWithAllByVille(ville);
 		if (list.isEmpty()) {
@@ -86,7 +85,7 @@ public class PersonneRestController {
 	}
 
 	@JsonView(JsonViews.PersonneWithAll.class)
-	@GetMapping("/praticiens/{specialite}")
+	@GetMapping("/praticiens/specialite/{specialite}")
 	public ResponseEntity<List<Praticien>> findBySpecialite(@PathVariable("specialite") String specialite) {
 		List<Praticien> list = personneRepository.findAllPraticienWithAllBySpecialite(specialite);
 		if (list.isEmpty()) {
@@ -97,7 +96,7 @@ public class PersonneRestController {
 	}
 
 	@JsonView(JsonViews.PersonneWithAll.class)
-	@GetMapping("/praticiens/{specialite}/{ville}")
+	@GetMapping("/praticiens/specialite/{specialite}/ville/{ville}")
 	public ResponseEntity<List<Praticien>> findBySpecialiteAndVille(@PathVariable("specialite") String specialite,
 			@PathVariable("ville") String ville) {
 		List<Praticien> list = personneRepository.findAllPraticienWithAllBySpecialiteAndVille(specialite, ville);

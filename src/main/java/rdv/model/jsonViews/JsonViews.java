@@ -10,6 +10,9 @@ public class JsonViews {
 	public static class PersonneWithAll {
 	};
 
+	public static class PatientWithAll {
+	};
+
 	public static class PraticienWithAdresse {
 	};
 
