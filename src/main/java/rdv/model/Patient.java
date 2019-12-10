@@ -14,7 +14,7 @@ import rdv.model.jsonViews.JsonViews;
 @DiscriminatorValue("Pa")
 public class Patient extends Personne {
 
-	@JsonView(JsonViews.PatientWithAll.class)
+	@JsonView(JsonViews.PersonneWithAll.class)
 	@OneToMany(mappedBy = "key.patient")
 	private Set<Consultation> consultations;
 

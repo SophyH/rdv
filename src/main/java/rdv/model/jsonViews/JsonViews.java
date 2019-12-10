@@ -4,23 +4,23 @@ public class JsonViews {
 	public static class Common {
 	};
 
-	public static class PersonneWithLogin {
+	public static class PersonneWithLogin extends Common {
 	};
 
-	public static class PersonneWithAll {
+	public static class PersonneWithAll extends Common {
 	};
 
-	public static class PatientWithAll {
+	public static class PatientWithAll extends Common {
 	};
 
-	public static class PraticienWithAdresse {
+	public static class PraticienWithAdresse extends Common {
 	};
 
-	public static class AdresseWithPraticien {
+	public static class AdresseWithPraticien extends Common {
 	};
-	
-	public static class LoginWithPersonne{
-		
+
+	public static class LoginWithPersonne extends Common {
+
 	};
 
 }
