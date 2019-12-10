@@ -17,25 +17,39 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonView;
+
+import rdv.model.jsonViews.JsonViews;
+
+@JsonTypeInfo(property = "type", use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY)
+@JsonSubTypes({ @Type(value = Patient.class, name = "patient"), @Type(value = Praticien.class, name = "praticien") })
 @Entity
 @Table(name = "personne")
 @SequenceGenerator(name = "seqPersonne", sequenceName = "seq_personne", initialValue = 100, allocationSize = 1)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type_personne", discriminatorType = DiscriminatorType.STRING, length = 2)
 public abstract class Personne {
-
+	@JsonView(JsonViews.Common.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqPersonne")
 	private Integer id;
+	@JsonView(JsonViews.Common.class)
 	@Enumerated
 	@Column(name = "civilite", length = 4)
 	private Civilite civilite;
+	@JsonView(JsonViews.Common.class)
 	@Column(name = "prenom")
 	private String prenom;
+	@JsonView(JsonViews.Common.class)
 	@Column(name = "nom")
 	private String nom;
+	@JsonView(JsonViews.Common.class)
 	@Column(name = "email")
 	private String mail;
+	@JsonView(JsonViews.PersonneWithLogin.class)
 	@OneToOne
 	@JoinColumn(name = "username", foreignKey = @ForeignKey(name = "login_id_personne_fk"))
 	private Login login;
