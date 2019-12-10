@@ -26,7 +26,7 @@ public class PersonneRestController {
 	@Autowired
 	private PersonneRepository personneRepository;
 
-	@JsonView(JsonViews.Common.class)
+	@JsonView(JsonViews.PersonneWithAll.class)
 	@GetMapping("/inscrits")
 	public ResponseEntity<List<Personne>> findAll() {
 		return new ResponseEntity<>(personneRepository.findAll(), HttpStatus.OK);
