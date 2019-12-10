@@ -11,8 +11,8 @@ import rdv.model.Creneau;
 
 public interface CreneauRepository extends JpaRepository<Creneau, Integer>{
 	
-	@Query("select distinct c from Creneau c left join fetch c.disponibilite where c.heureDebut=:heureDebut")
-	public Optional<Creneau> findByHeureDebutWithDisponibilite(@Param("heureDebut") Date heureDebut);
+	@Query("select distinct c from Creneau c left join fetch c.disponibilite where c.heureDebut=:hdebut")
+	public Optional<Creneau> findByHeureDebutWithDisponibilite(@Param("hdebut") Date hdebut);
 
 	@Query("select distinct c from Creneau c left join fetch c.consultation where c.id=:id")
 	public Optional<Creneau> findByIdWithConsultation(@Param("id") Integer id);
