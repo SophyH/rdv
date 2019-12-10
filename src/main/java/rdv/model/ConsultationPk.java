@@ -19,6 +19,13 @@ public class ConsultationPk implements Serializable{
 	public ConsultationPk() {
 		super();
 	}
+	
+	public ConsultationPk(Patient patient, Praticien praticien) {
+		super();
+		this.patient = patient;
+		this.praticien = praticien;
+	}
+
 
 	public Patient getPatient() {
 		return patient;

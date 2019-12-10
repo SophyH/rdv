@@ -96,16 +96,16 @@ public class PersonneRestController {
 		}
 	}
 
-//	@JsonView(JsonViews.PersonneWithAll.class)
-//	@GetMapping("/praticiens/{specialite}&{ville}")
-//	public ResponseEntity<List<Praticien>> findBySpecialiteAndVille(@PathVariable("specialite") String specialite,
-//			@PathVariable("ville") String ville) {
-//		List<Praticien> list = personneRepository.findAllPraticienWithAllBySpecialiteAndVille(specialite, ville);
-//		if (list.isEmpty()) {
-//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//		} else {
-//			return new ResponseEntity<>(list, HttpStatus.OK);
-//		}
-//	}
+	@JsonView(JsonViews.PersonneWithAll.class)
+	@GetMapping("/praticiens/{specialite}&{ville}")
+	public ResponseEntity<List<Praticien>> findBySpecialiteAndVille(@PathVariable("specialite") String specialite,
+			@PathVariable("ville") String ville) {
+		List<Praticien> list = personneRepository.findAllPraticienWithAllBySpecialiteAndVille(specialite, ville);
+		if (list.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(list, HttpStatus.OK);
+		}
+	}
 
 }

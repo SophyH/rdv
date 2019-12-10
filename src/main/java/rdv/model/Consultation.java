@@ -17,15 +17,26 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
+import rdv.model.jsonViews.JsonViews;
+
 @Entity
 @Table(name = "consultation")
 public class Consultation {
+	@JsonView(JsonViews.Common.class)
 	@EmbeddedId
 	private ConsultationPk key;
+	@JsonView(JsonViews.Common.class)
+	@Column(name= "numero_consultation", nullable = false)
+	private Integer numeroConsultation;
+	@JsonView(JsonViews.Common.class)
 	@Column(name = "date_consultation")
 	private Date date;
+	@JsonView(JsonViews.Common.class)
 	@Column(name = "motif_consultation")
 	private String motif;
+	@JsonView(JsonViews.Common.class)
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status")
 	private Status status;
@@ -40,13 +51,22 @@ public class Consultation {
 		
 	}
 	
-	public Consultation(Date date, String motif, Status status, Creneau creneau, int version) {
+	public Consultation(Integer numeroConsultation, Date date, String motif, Status status, Creneau creneau, int version) {
 		super();
+		this.numeroConsultation = numeroConsultation;
 		this.date = date;
 		this.motif = motif;
 		this.status = status;
 		this.creneau = creneau;
 		this.version = version;
+	}
+	
+	public Integer getNumeroConsultation() {
+		return numeroConsultation;
+	}
+
+	public void setNumeroConsultation(Integer numeroConsultation) {
+		this.numeroConsultation = numeroConsultation;
 	}
 
 	public Date getDate() {

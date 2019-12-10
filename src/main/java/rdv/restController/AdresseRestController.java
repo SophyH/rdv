@@ -95,12 +95,12 @@ public class AdresseRestController {
 	}
 	
 	//Pour une adresse, je cherche tous les praticiens et je le fais pour toutes les adresses
-//	@JsonView(JsonViews.AdresseWithPraticien.class)
-//	@GetMapping("/praticiens")
-//	public ResponseEntity<Adresse> findAllWithPraticien(){
-//		return ResponseEntity<> (findAll(), HttpStatus.OK);	
-//	}
-
+	@JsonView(JsonViews.AdresseWithPraticien.class)
+	@GetMapping("/praticiens")
+	public ResponseEntity<List<Adresse>> findAllWithPraticien() {
+		return new ResponseEntity<>(adresseRepository.findAllWithPraticien(), HttpStatus.OK);	
+	}
+ 
 //	@JsonView(JsonViews.AdresseWithPraticien.class)
 //	@GetMapping("/{nompraticien}"){
 //	}

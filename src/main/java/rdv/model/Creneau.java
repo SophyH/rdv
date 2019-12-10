@@ -15,14 +15,20 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
+import rdv.model.jsonViews.JsonViews;
+
 @Entity
 @Table(name = "creneau")
 @SequenceGenerator(name = "seqCreneau", sequenceName = "seq_creneau", initialValue = 100, allocationSize = 1 )
 public class Creneau {
+	@JsonView(JsonViews.Common.class)
 	@Id
 	@GeneratedValue(generator = "seqCreneau", strategy = GenerationType.SEQUENCE)
 	@Column(name = "id_creneau")
 	private Integer id;
+	@JsonView(JsonViews.Common.class)
 	@Column(name = "heure_debut_creneau")
 	private Date heureDebut;
 	@OneToOne(mappedBy = "creneau")
