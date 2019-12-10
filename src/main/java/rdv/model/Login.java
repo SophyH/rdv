@@ -31,15 +31,14 @@ public class Login {
 	// @Length(max=15, message = "15 caractères maximum") avec Validator
 	private String password;
 
-	
+	//@JsonView(JsonViews.LoginWithPersonne.class)
 	@OneToOne(mappedBy = "login")
 	private Personne personne;
-
 	
 	@Column(name = "activation")
 	private boolean enable;
-	@JsonView(JsonViews.Common.class)
 	
+	@JsonView(JsonViews.Common.class)
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role")
 	private Role role;
