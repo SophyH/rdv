@@ -10,33 +10,27 @@ public class JsonViews {
 	public static class PersonneWithAll extends Common {
 	};
 
-	public static class PatientWithAll extends Common {
-	};
-
-	public static class PraticienWithAdresse extends Common {
-	};
-
 	public static class AdresseWithPraticien extends Common {
 	};
 
 	public static class LoginWithPersonne extends Common {
 
 	};
-	
-	public static class PraticiensWithAdresse extends Common{
-		
+
+	public static class PraticiensWithAdresse extends Common {
+
 	};
-	
-	public static class DisponibiliteWithCreneau extends Common{
-		
+
+	public static class DisponibiliteWithCreneau extends Common {
+
 	};
-	
-	public static class DisponibiliteWithPraticien extends Common{
-		
+
+	public static class DisponibiliteWithPraticien extends Common {
+
 	};
-	
-	public static class UneDisponibilite extends Common{
-		
+
+	public static class UneDisponibilite extends Common {
+
 	};
 
 }

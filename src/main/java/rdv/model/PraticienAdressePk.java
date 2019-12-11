@@ -18,7 +18,7 @@ public class PraticienAdressePk implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "id_praticien_adresse_praticien", foreignKey = @ForeignKey(name = "praticien_adresse_praticien_id_fk"))
 	private Praticien praticien;
-	@JsonView(JsonViews.PraticienWithAdresse.class)
+	@JsonView(JsonViews.Common.class)
 	@ManyToOne
 	@JoinColumn(name = "id_adresse_adresse_praticien", foreignKey = @ForeignKey(name = "praticien_adresse_adresse_id_fk"))
 	private Adresse adresse;
