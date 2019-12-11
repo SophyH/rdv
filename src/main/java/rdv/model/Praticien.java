@@ -23,7 +23,7 @@ public class Praticien extends Personne {
 	@JsonView(JsonViews.PersonneWithAll.class)
 	@OneToMany(mappedBy = "praticien")
 	private Set<Disponibilite> disponibilites;
-	@JsonView(JsonViews.PraticiensWithAdresse.class)
+	@JsonView(JsonViews.PersonneWithAll.class)
 	@OneToMany(mappedBy = "key.praticien")
 	private Set<PraticienAdresse> praticienAdresses;
 

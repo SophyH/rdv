@@ -10,7 +10,7 @@ public class JsonViews {
 	public static class PersonneWithAll extends Common {
 	};
 
-	public static class AdresseWithPraticien extends Common {
+	public static class AdresseWithPraticien extends PersonneWithAll {
 	};
 
 	public static class LoginWithPersonne extends Common {

@@ -12,7 +12,7 @@ import rdv.model.jsonViews.JsonViews;
 @Table(name = "praticien_adresse")
 public class PraticienAdresse {
 
-	@JsonView(JsonViews.AdresseWithPraticien.class)
+	@JsonView(JsonViews.PersonneWithAll.class)
 	@EmbeddedId
 	private PraticienAdressePk key;
 

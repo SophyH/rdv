@@ -94,17 +94,4 @@ public class AdresseRestController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	//Pour une adresse, je cherche tous les praticiens et je le fais pour toutes les adresses
-	@JsonView(JsonViews.PraticiensWithAdresse.class)
-	@GetMapping("/praticiens")
-	public ResponseEntity<List<Adresse>> findAllWithPraticien() {
-		return new ResponseEntity<>(adresseRepository.findAllWithPraticien(), HttpStatus.OK);	
-	}
-	
-	//Si je donne le nom d'un praticien je retrouve ses adresses
-	@JsonView(JsonViews.AdresseWithPraticien.class)
-	@GetMapping("/praticien/{nom}")
-	public ResponseEntity<List<Adresse>> findAllWithPraticienByNomPraticien(@PathVariable("nom") String nom){
-		return new ResponseEntity<>(adresseRepository.findAllWithPraticienByNomPraticien(nom), HttpStatus.OK);
-	}
 }
