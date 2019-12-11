@@ -22,6 +22,7 @@ import org.springframework.boot.convert.DurationFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import rdv.model.jsonViews.JsonViews;
 
@@ -39,8 +40,9 @@ public class Specialite {
 	private String specialite;
 	@JsonView(JsonViews.Common.class)
 	@Column(name = "duree_specialite", length = 100)
-	@Temporal(TemporalType.TIME)
-	@DateTimeFormat(pattern= "HH:mm:ss")
+	@JsonDeserialize(using = CustomerDateAndTimeDeserialize.class)
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(style = "HH:mm:ss")
 	private Date duree;
 	@JsonView(JsonViews.SpecialiteWithPraticien.class)
 	@ManyToOne
