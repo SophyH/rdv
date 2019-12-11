@@ -13,9 +13,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import rdv.model.jsonViews.JsonViews;
 
@@ -29,6 +36,9 @@ public class Creneau {
 	@Column(name = "id_creneau")
 	private Integer id;
 	@JsonView(JsonViews.Common.class)
+	@JsonDeserialize(using = CustomerDateAndTimeDeserialize.class)
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern= "HH:mm:ss")
 	@Column(name = "heure_debut_creneau")
 	private Date heureDebut;
 	@OneToOne(mappedBy = "creneau")

@@ -15,7 +15,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Version;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -32,6 +36,8 @@ public class Consultation {
 	private Integer numeroConsultation;
 	@JsonView(JsonViews.Common.class)
 	@Column(name = "date_consultation")
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date date;
 	@JsonView(JsonViews.Common.class)
 	@Column(name = "motif_consultation")
