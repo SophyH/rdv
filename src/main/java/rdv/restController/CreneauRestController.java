@@ -22,8 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import rdv.model.Creneau;
+import rdv.model.CustomerDateAndTimeDeserialize;
 import rdv.model.jsonViews.JsonViews;
 import rdv.repository.CreneauRepository;
 
@@ -75,6 +77,7 @@ public class CreneauRestController {
 		headers.setLocation(uCB.path("/creneau/{id}").buildAndExpand(creneau.getId()).toUri());
 		return new ResponseEntity<>(headers, HttpStatus.CREATED);
 	}
+	
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Void> update(@PathVariable("id") Integer id, @Valid @RequestBody Creneau creneau, BindingResult br) {
