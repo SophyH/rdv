@@ -49,18 +49,26 @@ public class ConsultationRestController {
 		return new ResponseEntity<>(consultationRepository.findAll(), HttpStatus.OK);
 	}
 	
-	private ResponseEntity<Consultation> findByKey(@PathVariable("numeroConsultation") Integer numeroConsultation) {
-		Optional<Consultation> opt=consultationRepository.findByNumeroConsultation(numeroConsultation);
+	private ResponseEntity<Consultation> findByKey(@PathVariable("idPatient") Integer idPatient, @PathVariable("idPraticien") Integer idPraticien) {
+		Optional<Personne> opt1 = personneRepository.findById(idPatient);
+		Optional<Personne> opt2 = personneRepository.findById(idPraticien);
+		Patient patient = null;
+		Praticien praticien = null;
+		if (opt1.isPresent() && opt2.isPresent()) {
+			patient = (Patient) opt1.get();
+			praticien = (Praticien) opt2.get();
+			Optional<Consultation> opt=consultationRepository.findById(new ConsultationPk(patient, praticien));
 		if (opt.isPresent()) {
 			return new ResponseEntity<Consultation>(opt.get(), HttpStatus.OK);
+		}
 		}
 		return new ResponseEntity<Consultation>(HttpStatus.NOT_FOUND);
 	}
 	
 	@JsonView(JsonViews.Common.class)
-	@GetMapping("/{numeroConsultation}")
-	public ResponseEntity<Consultation> findById(@PathVariable("numeroConsultation") Integer numeroConsultation) {
-		return findByKey(numeroConsultation);
+	@GetMapping("/{idPatient}&{idPraticien}")
+	public ResponseEntity<Consultation> findById(@PathVariable("idPatient") Integer idPatient, @PathVariable("idPraticien") Integer idPraticien) {
+		return findByKey(idPatient, idPraticien);
 	}
 	
 	
@@ -86,23 +94,40 @@ public class ConsultationRestController {
 	}
 	
 	
-	@PostMapping({"", "/"})
-	public ResponseEntity<Void> insert(@Valid @RequestBody Consultation consultation, BindingResult br, UriComponentsBuilder uCB) {
+	@PostMapping("/{idPatient}&{idPraticien}")
+	public ResponseEntity<Void> insert(@PathVariable("idPatient") Integer idPatient, @PathVariable("idPraticien") Integer idPraticien, @Valid @RequestBody Consultation consultation, BindingResult br, UriComponentsBuilder uCB) {
 		if (br.hasErrors()) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
+		Optional<Personne> opt1 = personneRepository.findById(idPatient);
+		Optional<Personne> opt2 = personneRepository.findById(idPraticien);
+		Patient patient = null;
+		Praticien praticien = null;
+		if (opt1.isPresent() && opt2.isPresent()) {
+			patient = (Patient) opt1.get();
+			praticien = (Praticien) opt2.get();
+		consultation.setKey(new ConsultationPk(patient, praticien));
 		consultationRepository.save(consultation);
 		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(uCB.path("/consultation/{numeroConsultation}").buildAndExpand(consultation.getNumeroConsultation()).toUri());
+		headers.setLocation(uCB.path("/consultation/{idPatient}&{idPraticien}").buildAndExpand(consultation.getKey()).toUri());
 		return new ResponseEntity<>(headers,HttpStatus.CREATED);
 	}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	
-	@PutMapping("{/numeroConsultation}")
-	public ResponseEntity<Void> update(@PathVariable("numeroConsultation") Integer numeroConsultation, @Valid @RequestBody Consultation consultation, BindingResult br) {
+	@PutMapping("/{idPatient}&{idPraticien}")
+	public ResponseEntity<Void> update(@PathVariable("idPatient") Integer idPatient, @PathVariable("idPraticien") Integer idPraticien, @Valid @RequestBody Consultation consultation, BindingResult br) {
 		if(br.hasErrors()) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		Optional<Consultation> opt = consultationRepository.findByNumeroConsultation(numeroConsultation);
+		Optional<Personne> opt1 = personneRepository.findById(idPatient);
+		Optional<Personne> opt2 = personneRepository.findById(idPraticien);
+		Patient patient = null;
+		Praticien praticien = null;
+		if (opt1.isPresent() && opt2.isPresent()) {
+			patient = (Patient) opt1.get();
+			praticien = (Praticien) opt2.get();
+		Optional<Consultation> opt = consultationRepository.findById(new ConsultationPk(patient, praticien));
 		if (!opt.isPresent()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -112,6 +137,8 @@ public class ConsultationRestController {
 		consultationEnBase.setStatus(consultation.getStatus());
 		consultationEnBase.setNumeroConsultation(consultation.getNumeroConsultation());
 		consultationRepository.save(consultationEnBase);
+		return new ResponseEntity<>(HttpStatus.OK);
+		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	} 
 	
