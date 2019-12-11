@@ -179,12 +179,14 @@ public class PersonneRestController {
 	}
 
 	@PutMapping("/patient/{id}")
-	public ResponseEntity<Void> updatePatient(@PathVariable("id") Integer id, Patient patient, BindingResult br) {
+	public ResponseEntity<Void> updatePatient(@PathVariable("id") Integer id, @Valid @RequestBody Patient patient,
+			BindingResult br) {
 		return update(id, patient, br);
 	}
 
 	@PutMapping("praticien/{id}")
-	public ResponseEntity<Void> updatePraticien(@PathVariable("id") Integer id, Praticien praticien, BindingResult br) {
+	public ResponseEntity<Void> updatePraticien(@PathVariable("id") Integer id, @Valid @RequestBody Praticien praticien,
+			BindingResult br) {
 		return update(id, praticien, br);
 	}
 
