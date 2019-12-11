@@ -38,5 +38,9 @@ public class JsonViews {
 	public static class UneDisponibilite extends Common{
 		
 	};
+	
+	public static class SpecialiteWithPraticien extends Common{
+		
+	};
 
 }
