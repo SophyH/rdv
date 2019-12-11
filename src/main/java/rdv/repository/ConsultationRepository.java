@@ -21,10 +21,10 @@ public interface ConsultationRepository extends JpaRepository<Consultation, Cons
 	@Query("delete from Consultation c where c.numeroConsultation=:numeroConsultation")
 	public Optional<Consultation> deleteByNumeroConsultation(@Param("numeroConsultation") Integer numeroConsultation);
 
-	@Query("select distinct c from Consultation left join fetch c.creneaux left join fetch c.key.patient p where p.id=:id")
+	@Query("select distinct c from Consultation c left join fetch c.creneau left join fetch c.key.patient p where p.id=:id")
 	public List<Consultation> findAllByIdPatient(@Param("id") Integer id);
 
-	@Query("select distinct c from Consultation left join fetch c.creneaux left join fetch c.key.praticien p where p.id=:id")
+	@Query("select distinct c from Consultation c left join fetch c.creneau left join fetch c.key.praticien p where p.id=:id")
 	public List<Consultation> findAllByIdPraticien(@Param("id") Integer id);
 
 }
