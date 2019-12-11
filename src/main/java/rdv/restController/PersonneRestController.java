@@ -24,7 +24,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import rdv.model.Adresse;
 import rdv.model.Consultation;
 import rdv.model.Login;
 import rdv.model.Patient;
@@ -232,21 +231,7 @@ public class PersonneRestController {
 				((Praticien) personneEnBase).setDisponibilites(((Praticien) personne).getDisponibilites());
 				List<PraticienAdresse> praticienAdresses = paRep.findAllByIdPraticient(id);
 				for (PraticienAdresse pa : praticienAdresses) {
-					List<Adresse> adresses = adresseRepository.findAllByIdPraticien(id);
-					for (Adresse a : adresses) {
-						Optional<Adresse> optA = adresseRepository.findById(a.getId());
-						if (optA.isPresent()) {
-							Adresse adr = optA.get();
-							adr.setAdresse(a.getAdresse());
-							adr.setCodePostal(a.getCodePostal());
-							adr.setVille(a.getVille());
-							adresseRepository.save(adr);
-							pa.getKey().setAdresse(adr);
-							paRep.save(pa);
-							praA.add(pa);
-						}
-
-					}
+					praA.add(pa);
 				}
 				((Praticien) personneEnBase).setPraticienAdresses(praA);
 				((Praticien) personneEnBase).setSpecialites(((Praticien) personne).getSpecialites());
@@ -254,6 +239,7 @@ public class PersonneRestController {
 			personneRepository.save(personneEnBase);
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		}
+
 	}
 
 	@PutMapping("/patient/{id}")

@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -22,69 +23,76 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import org.springframework.http.HttpHeaders;
 import rdv.model.Adresse;
 import rdv.model.jsonViews.JsonViews;
 import rdv.repository.AdresseRepository;
 
-@CrossOrigin(origins = {"*"})
+@CrossOrigin(origins = { "*" })
 @RestController
 @RequestMapping("/adresse")
 public class AdresseRestController {
 
 	@Autowired
 	private AdresseRepository adresseRepository;
-	
-	//pour remonter les adresses
+
+	// pour remonter les adresses
 	@JsonView(JsonViews.Common.class)
-	@GetMapping({"","/"})
-	ResponseEntity<List<Adresse>> findAll(){
-		return new ResponseEntity<> (adresseRepository.findAll(),HttpStatus.OK);
+	@GetMapping({ "", "/" })
+	public ResponseEntity<List<Adresse>> findAll() {
+		return new ResponseEntity<>(adresseRepository.findAll(), HttpStatus.OK);
 	}
-	
-	//pour remonter une seule adresse
+
+	@JsonView(JsonViews.Common.class)
+	@GetMapping("/praticien/{id}")
+	public ResponseEntity<List<Adresse>> findAllByIdPraticien(@PathVariable("id") Integer id) {
+		return new ResponseEntity<List<Adresse>>(adresseRepository.findAllByIdPraticien(id), HttpStatus.OK);
+	}
+
+	// pour remonter une seule adresse
 	@JsonView(JsonViews.Common.class)
 	@GetMapping("/{id}")
-	public ResponseEntity<Adresse> findById(@PathVariable("id") Integer id){
+	public ResponseEntity<Adresse> findById(@PathVariable("id") Integer id) {
 		Optional<Adresse> opt = adresseRepository.findById(id);
-		if(opt.isPresent()) {
+		if (opt.isPresent()) {
 			return new ResponseEntity<>(opt.get(), HttpStatus.OK);
 		}
-		return new ResponseEntity<> (opt.get(), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(opt.get(), HttpStatus.NOT_FOUND);
 	}
-	
-	//pour supprimer une adresse
+
+	// pour supprimer une adresse
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable("id") Integer id){
+	public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
 		Optional<Adresse> opt = adresseRepository.findById(id);
-		if(opt.isPresent()) {
+		if (opt.isPresent()) {
 			adresseRepository.deleteById(id);
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 	}
-	
-	//pour créer une adresse
-	@PostMapping({"","/"})
-	public ResponseEntity<Void> insert(@Valid @RequestBody Adresse adresse, BindingResult br, UriComponentsBuilder uCB){
-		if(br.hasErrors()) {
-			return new ResponseEntity<> (HttpStatus.BAD_REQUEST);
+
+	// pour créer une adresse
+	@PostMapping({ "", "/" })
+	public ResponseEntity<Void> insert(@Valid @RequestBody Adresse adresse, BindingResult br,
+			UriComponentsBuilder uCB) {
+		if (br.hasErrors()) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		adresseRepository.save(adresse);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(uCB.path("/adresse/{id}").buildAndExpand(adresse.getId()).toUri());
-		return new ResponseEntity<>(headers, HttpStatus.CREATED);	
+		return new ResponseEntity<>(headers, HttpStatus.CREATED);
 	}
-	
-	//modifier une adresse
+
+	// modifier une adresse
 	@PutMapping("/{id}")
-	public ResponseEntity<Void> update(@PathVariable("id") Integer id, @Valid @RequestBody Adresse adresse, BindingResult br){
-		if(br.hasErrors()) {
-			return new ResponseEntity<> (HttpStatus.BAD_REQUEST);
+	public ResponseEntity<Void> update(@PathVariable("id") Integer id, @Valid @RequestBody Adresse adresse,
+			BindingResult br) {
+		if (br.hasErrors()) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		Optional<Adresse> opt = adresseRepository.findById(id);
-		if(!opt.isPresent()) {
-			return new ResponseEntity<> (HttpStatus.NOT_FOUND);
+		if (!opt.isPresent()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		Adresse adresseEnBase = opt.get();
 		adresseEnBase.setAdresse(adresse.getAdresse());
@@ -93,5 +101,5 @@ public class AdresseRestController {
 		adresseRepository.save(adresseEnBase);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
 }
