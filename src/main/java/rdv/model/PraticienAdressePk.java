@@ -14,7 +14,7 @@ import rdv.model.jsonViews.JsonViews;
 @Embeddable
 public class PraticienAdressePk implements Serializable {
 
-	@JsonView(JsonViews.AdresseWithPraticien.class)
+	@JsonView(JsonViews.Common.class)
 	@ManyToOne
 	@JoinColumn(name = "id_praticien_adresse_praticien", foreignKey = @ForeignKey(name = "praticien_adresse_praticien_id_fk"))
 	private Praticien praticien;
