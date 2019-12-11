@@ -26,7 +26,6 @@ import rdv.model.jsonViews.JsonViews;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-
 @Entity
 @Table(name = "disponibilite")
 @SequenceGenerator(name = "seqDisponibilite", sequenceName = "seq_disponibilite", initialValue = 100, allocationSize = 1)
@@ -36,38 +35,38 @@ public class Disponibilite {
 	@GeneratedValue(generator = "seqDisponibilite", strategy = GenerationType.SEQUENCE)
 	@Column(name = "id_disponibilite")
 	private Integer id;
-	
+
 	@JsonView(JsonViews.Common.class)
 	@Column(name = "hdebut_disponibilite", length = 100)
 	@Temporal(TemporalType.TIME)
-	@DateTimeFormat(pattern= "HH:mm:ss")
+	@DateTimeFormat(pattern = "HH:mm:ss")
 	private Date hdebut;
-	
+
 	@JsonView(JsonViews.Common.class)
 	@Column(name = "hfin_disponibilite", length = 100)
 	@Temporal(TemporalType.TIME)
-	@DateTimeFormat(pattern= "HH:mm:ss")
+	@DateTimeFormat(style = "HH:mm")
 	private Date hfin;
-	
+
 	@JsonView(JsonViews.Common.class)
 	@Enumerated(EnumType.STRING)
 	@Column(name = "jour_disponibilite", length = 100)
 	private Jour jour;
-	
+
 	@JsonView(JsonViews.Common.class)
 	@Column(name = "duree_disponibilite", length = 100)
 	private Date duree;
-	
+
 	@JsonView(JsonViews.DisponibiliteWithCreneau.class)
 	@OneToMany(mappedBy = "disponibilite")
 	@Column(name = "creneaux_disponibilite", length = 100)
 	private Set<Creneau> creneaux;
-	
+
 	@JsonView(JsonViews.DisponibiliteWithPraticien.class)
 	@ManyToOne
 	@JoinColumn(name = "praticien_id_disponibilite", foreignKey = @ForeignKey(name = "praticien_id_disponibilite_fk"))
 	private Praticien praticien;
-	
+
 	@Version
 	private int version;
 
