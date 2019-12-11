@@ -21,6 +21,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import rdv.model.jsonViews.JsonViews;
 
@@ -38,14 +39,16 @@ public class Disponibilite {
 
 	@JsonView(JsonViews.Common.class)
 	@Column(name = "hdebut_disponibilite", length = 100)
-	@Temporal(TemporalType.TIME)
+	@JsonDeserialize(using = CustomerDateAndTimeDeserialize.class)
+	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "HH:mm:ss")
 	private Date hdebut;
 
 	@JsonView(JsonViews.Common.class)
 	@Column(name = "hfin_disponibilite", length = 100)
-	@Temporal(TemporalType.TIME)
-	@DateTimeFormat(style = "HH:mm")
+	@JsonDeserialize(using = CustomerDateAndTimeDeserialize.class)
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(style = "HH:mm:ss")
 	private Date hfin;
 
 	@JsonView(JsonViews.Common.class)
@@ -55,6 +58,9 @@ public class Disponibilite {
 
 	@JsonView(JsonViews.Common.class)
 	@Column(name = "duree_disponibilite", length = 100)
+	@JsonDeserialize(using = CustomerDateAndTimeDeserialize.class)
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(style = "HH:mm:ss")
 	private Date duree;
 
 	@JsonView(JsonViews.DisponibiliteWithCreneau.class)

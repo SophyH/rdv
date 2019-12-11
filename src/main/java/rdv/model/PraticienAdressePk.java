@@ -27,6 +27,16 @@ public class PraticienAdressePk implements Serializable {
 		super();
 	}
 
+	
+	
+	public PraticienAdressePk(Praticien praticien, Adresse adresse) {
+		super();
+		this.praticien = praticien;
+		this.adresse = adresse;
+	}
+
+
+
 	public Praticien getPraticien() {
 		return praticien;
 	}

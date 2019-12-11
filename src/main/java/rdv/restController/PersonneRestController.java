@@ -1,7 +1,9 @@
 package rdv.restController;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -22,11 +24,20 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import rdv.model.Adresse;
+import rdv.model.Consultation;
+import rdv.model.Login;
 import rdv.model.Patient;
 import rdv.model.Personne;
 import rdv.model.Praticien;
+import rdv.model.PraticienAdresse;
 import rdv.model.jsonViews.JsonViews;
+import rdv.model.jsonViews.JsonViews.PersonneWithAll;
+import rdv.repository.AdresseRepository;
+import rdv.repository.ConsultationRepository;
+import rdv.repository.LoginRepository;
 import rdv.repository.PersonneRepository;
+import rdv.repository.PraticienAdresseRepository;
 
 @RestController
 @RequestMapping({ "/", "" })
@@ -34,6 +45,18 @@ public class PersonneRestController {
 
 	@Autowired
 	private PersonneRepository personneRepository;
+
+	@Autowired
+	private ConsultationRepository consultationRepository;
+
+	@Autowired
+	private PraticienAdresseRepository paRep;
+
+	@Autowired
+	private LoginRepository loginRepository;
+
+	@Autowired
+	private AdresseRepository adresseRepository;
 
 	@JsonView(JsonViews.Common.class)
 	@GetMapping("/inscrits")
@@ -66,7 +89,7 @@ public class PersonneRestController {
 	}
 
 	@JsonView(JsonViews.PersonneWithAll.class)
-	@GetMapping("/{nom}")
+	@GetMapping("inscrits/{nom}")
 	public ResponseEntity<List<Personne>> findByNomWithAll(@PathVariable("nom") String nom) {
 		return findByName(nom);
 	}
@@ -83,9 +106,31 @@ public class PersonneRestController {
 		return new ResponseEntity<>(personneRepository.findAllPatient(), HttpStatus.OK);
 	}
 
+	@JsonView(PersonneWithAll.class)
+	@GetMapping("/praticiens/nom/{nom}")
+	public ResponseEntity<List<Praticien>> findPraticienByNom(@PathVariable("nom") String nom) {
+		List<Praticien> list = personneRepository.findByNomPraticien(nom);
+		if (list.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(list, HttpStatus.OK);
+		}
+	}
+
+	@JsonView(PersonneWithAll.class)
+	@GetMapping("/patients/nom/{nom}")
+	public ResponseEntity<List<Patient>> findPatientByNom(@PathVariable("nom") String nom) {
+		List<Patient> list = personneRepository.findByNomPatient(nom);
+		if (list.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(list, HttpStatus.OK);
+		}
+	}
+
 	@JsonView(JsonViews.PersonneWithAll.class)
 	@GetMapping("/praticiens/ville/{ville}")
-	public ResponseEntity<List<Praticien>> findByVille(@PathVariable("ville") String ville) {
+	public ResponseEntity<List<Praticien>> findPraticienByVille(@PathVariable("ville") String ville) {
 		List<Praticien> list = personneRepository.findAllPraticienWithAllByVille(ville);
 		if (list.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -96,7 +141,7 @@ public class PersonneRestController {
 
 	@JsonView(JsonViews.PersonneWithAll.class)
 	@GetMapping("/praticiens/specialite/{specialite}")
-	public ResponseEntity<List<Praticien>> findBySpecialite(@PathVariable("specialite") String specialite) {
+	public ResponseEntity<List<Praticien>> findPraticienBySpecialite(@PathVariable("specialite") String specialite) {
 		List<Praticien> list = personneRepository.findAllPraticienWithAllBySpecialite(specialite);
 		if (list.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -107,8 +152,8 @@ public class PersonneRestController {
 
 	@JsonView(JsonViews.PersonneWithAll.class)
 	@GetMapping("/praticiens/{specialite}&{ville}")
-	public ResponseEntity<List<Praticien>> findBySpecialiteAndVille(@PathVariable("specialite") String specialite,
-			@PathVariable("ville") String ville) {
+	public ResponseEntity<List<Praticien>> findPraticienBySpecialiteAndVille(
+			@PathVariable("specialite") String specialite, @PathVariable("ville") String ville) {
 		List<Praticien> list = personneRepository.findAllPraticienWithAllBySpecialiteAndVille(specialite, ville);
 		if (list.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -151,6 +196,8 @@ public class PersonneRestController {
 	}
 
 	private ResponseEntity<Void> update(Integer id, Personne personne, BindingResult br) {
+		Set<Consultation> cons = new HashSet<>();
+		Set<PraticienAdresse> praA = new HashSet<>();
 		if (br.hasErrors()) {
 			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 		}
@@ -160,17 +207,48 @@ public class PersonneRestController {
 		} else {
 			Personne personneEnBase = opt.get();
 			personneEnBase.setCivilite(personne.getCivilite());
-			personneEnBase.setId(personne.getId());
-			personneEnBase.setLogin(personne.getLogin());
+			Optional<Login> optL = loginRepository.findById(personne.getLogin().getUsername());
+			if (optL.isPresent()) {
+				Login loginEnBase = optL.get();
+				loginEnBase.setPassword(personne.getLogin().getPassword());
+				loginRepository.save(loginEnBase);
+				personneEnBase.setLogin(loginEnBase);
+			}
 			personneEnBase.setMail(personne.getMail());
 			personneEnBase.setNom(personne.getNom());
 			personneEnBase.setPrenom(personne.getPrenom());
 			if (personneEnBase instanceof Patient) {
-				((Patient) personneEnBase).setConsultations(((Patient) personne).getConsultations());
+				List<Consultation> consultations = consultationRepository.findAllByIdPatient(id);
+				for (Consultation c : consultations) {
+					cons.add(c);
+				}
+				((Patient) personneEnBase).setConsultations(cons);
 			} else if (personneEnBase instanceof Praticien) {
-				((Praticien) personneEnBase).setConsultations(((Praticien) personne).getConsultations());
+				List<Consultation> consultations = consultationRepository.findAllByIdPraticien(id);
+				for (Consultation c : consultations) {
+					cons.add(c);
+				}
+				((Praticien) personneEnBase).setConsultations(cons);
 				((Praticien) personneEnBase).setDisponibilites(((Praticien) personne).getDisponibilites());
-				((Praticien) personneEnBase).setPraticienAdresses(((Praticien) personne).getPraticienAdresses());
+				List<PraticienAdresse> praticienAdresses = paRep.findAllByIdPraticient(id);
+				for (PraticienAdresse pa : praticienAdresses) {
+					List<Adresse> adresses = adresseRepository.findAllByIdPraticien(id);
+					for (Adresse a : adresses) {
+						Optional<Adresse> optA = adresseRepository.findById(a.getId());
+						if (optA.isPresent()) {
+							Adresse adr = optA.get();
+							adr.setAdresse(a.getAdresse());
+							adr.setCodePostal(a.getCodePostal());
+							adr.setVille(a.getVille());
+							adresseRepository.save(adr);
+							pa.getKey().setAdresse(adr);
+							paRep.save(pa);
+							praA.add(pa);
+						}
+
+					}
+				}
+				((Praticien) personneEnBase).setPraticienAdresses(praA);
 				((Praticien) personneEnBase).setSpecialites(((Praticien) personne).getSpecialites());
 			}
 			personneRepository.save(personneEnBase);

@@ -18,6 +18,9 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -51,6 +54,7 @@ public abstract class Personne {
 	@Column(name = "email")
 	private String mail;
 	@JsonView(JsonViews.PersonneWithAll.class)
+	@Cascade(CascadeType.PERSIST)
 	@OneToOne
 	@JoinColumn(name = "username", foreignKey = @ForeignKey(name = "login_id_personne_fk"))
 	private Login login;
