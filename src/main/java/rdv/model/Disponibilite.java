@@ -36,7 +36,7 @@ public class Disponibilite {
 	private Date hdebut;
 	@Column(name = "hfin_disponibilite", length = 100)
 	@Temporal(TemporalType.TIME)
-	@DateTimeFormat(pattern= "HH:mm:ss")
+	@DateTimeFormat(style = "HH:mm")
 	private Date hfin;
 	@Enumerated(EnumType.STRING)
 	@Column(name = "jour_disponibilite", length = 100)
