@@ -37,7 +37,7 @@ public class Creneau {
 	private Integer id;
 	@JsonView(JsonViews.Common.class)
 	@JsonDeserialize(using = CustomerDateAndTimeDeserialize.class)
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.TIME)
 	@DateTimeFormat(pattern= "HH:mm:ss")
 	@Column(name = "heure_debut_creneau")
 	private Date heureDebut;
