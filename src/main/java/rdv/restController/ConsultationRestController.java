@@ -24,10 +24,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import rdv.model.Consultation;
-import rdv.model.ConsultationPk;
-import rdv.model.Patient;
-import rdv.model.Personne;
-import rdv.model.Praticien;
 import rdv.model.jsonViews.JsonViews;
 import rdv.repository.ConsultationRepository;
 import rdv.repository.PersonneRepository;
@@ -49,21 +45,12 @@ public class ConsultationRestController {
 		return new ResponseEntity<>(consultationRepository.findAll(), HttpStatus.OK);
 	}
 
-	private ResponseEntity<Consultation> findByKey(@PathVariable("idPatient") Integer idPatient,
-			@PathVariable("idPraticien") Integer idPraticien) {
-		Optional<Personne> opt1 = personneRepository.findById(idPatient);
-		Optional<Personne> opt2 = personneRepository.findById(idPraticien);
-		Patient patient = null;
-		Praticien praticien = null;
-		if (opt1.isPresent() && opt2.isPresent()) {
-			patient = (Patient) opt1.get();
-			praticien = (Praticien) opt2.get();
-			Optional<Consultation> opt = consultationRepository.findById(new ConsultationPk(patient, praticien));
+	private ResponseEntity<Consultation> findByKey(@PathVariable("id") Integer id) {
+			Optional<Consultation> opt = consultationRepository.findById(id);
 			if (opt.isPresent()) {
 				return new ResponseEntity<Consultation>(opt.get(), HttpStatus.OK);
 			}
-		}
-		return new ResponseEntity<Consultation>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Consultation>(HttpStatus.NOT_FOUND);
 	}
 
 	@JsonView(JsonViews.Common.class)
@@ -78,74 +65,41 @@ public class ConsultationRestController {
 		return new ResponseEntity<List<Consultation>>(consultationRepository.findAllByIdPatient(id), HttpStatus.OK);
 	}
 
-	@JsonView(JsonViews.Common.class)
-	@GetMapping("/{idPatient}&{idPraticien}")
-	public ResponseEntity<Consultation> findById(@PathVariable("idPatient") Integer idPatient,
-			@PathVariable("idPraticien") Integer idPraticien) {
-		return findByKey(idPatient, idPraticien);
+	@JsonView(JsonViews.ConsultationWithPersonne.class)
+	@GetMapping("/{id}")
+	public ResponseEntity<Consultation> findById(@PathVariable("id") Integer id) {
+		return findByKey(id);
 	}
 
-	@DeleteMapping("/{idPatient}&{idPraticien}")
-	public ResponseEntity<Void> delete(@PathVariable("idPatient") Integer idPatient,
-			@PathVariable("idPraticien") Integer idPraticien) {
-		Optional<Personne> opt1 = personneRepository.findById(idPatient);
-		Optional<Personne> opt2 = personneRepository.findById(idPraticien);
-		Patient patient = null;
-		Praticien praticien = null;
-		Consultation consultation = null;
-		if (opt1.isPresent() && opt2.isPresent()) {
-			patient = (Patient) opt1.get();
-			praticien = (Praticien) opt2.get();
-			Optional<Consultation> opt = consultationRepository.findById(new ConsultationPk(patient, praticien));
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
+			Optional<Consultation> opt = consultationRepository.findById(id);
 			if (opt.isPresent()) {
-				consultation = opt.get();
-				consultationRepository.delete(consultation);
+				consultationRepository.deleteById(id);
 				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 			}
 			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 	}
 
-	@PostMapping("/{idPatient}&{idPraticien}")
-	public ResponseEntity<Void> insert(@PathVariable("idPatient") Integer idPatient,
-			@PathVariable("idPraticien") Integer idPraticien, @Valid @RequestBody Consultation consultation,
-			BindingResult br, UriComponentsBuilder uCB) {
+	@PostMapping({"", "/"})
+	public ResponseEntity<Void> insert(@Valid @RequestBody Consultation consultation, BindingResult br, UriComponentsBuilder uCB) {
 		if (br.hasErrors()) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		Optional<Personne> opt1 = personneRepository.findById(idPatient);
-		Optional<Personne> opt2 = personneRepository.findById(idPraticien);
-		Patient patient = null;
-		Praticien praticien = null;
-		if (opt1.isPresent() && opt2.isPresent()) {
-			patient = (Patient) opt1.get();
-			praticien = (Praticien) opt2.get();
-			consultation.setKey(new ConsultationPk(patient, praticien));
-			consultationRepository.save(consultation);
-			HttpHeaders headers = new HttpHeaders();
-			headers.setLocation(
-					uCB.path("/consultation/{idPatient}&{idPraticien}").buildAndExpand(consultation.getKey()).toUri());
-			return new ResponseEntity<>(headers, HttpStatus.CREATED);
-		}
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		consultationRepository.save(consultation);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(
+				uCB.path("/consultation/{id}").buildAndExpand(consultation.getId()).toUri());
+		return new ResponseEntity<>(headers, HttpStatus.CREATED);
 	}
 
-	@PutMapping("/{idPatient}&{idPraticien}")
-	public ResponseEntity<Void> update(@PathVariable("idPatient") Integer idPatient,
-			@PathVariable("idPraticien") Integer idPraticien, @Valid @RequestBody Consultation consultation,
+	@PutMapping("/{id}")
+	public ResponseEntity<Void> update(@PathVariable("id") Integer id, @Valid @RequestBody Consultation consultation,
 			BindingResult br) {
 		if (br.hasErrors()) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		Optional<Personne> opt1 = personneRepository.findById(idPatient);
-		Optional<Personne> opt2 = personneRepository.findById(idPraticien);
-		Patient patient = null;
-		Praticien praticien = null;
-		if (opt1.isPresent() && opt2.isPresent()) {
-			patient = (Patient) opt1.get();
-			praticien = (Praticien) opt2.get();
-			Optional<Consultation> opt = consultationRepository.findById(new ConsultationPk(patient, praticien));
+			Optional<Consultation> opt = consultationRepository.findById(id);
 			if (!opt.isPresent()) {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
@@ -153,11 +107,8 @@ public class ConsultationRestController {
 			consultationEnBase.setDate(consultation.getDate());
 			consultationEnBase.setMotif(consultation.getMotif());
 			consultationEnBase.setStatus(consultation.getStatus());
-			consultationEnBase.setNumeroConsultation(consultation.getNumeroConsultation());
 			consultationRepository.save(consultationEnBase);
 			return new ResponseEntity<>(HttpStatus.OK);
-		}
-		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 }

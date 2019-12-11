@@ -29,7 +29,7 @@ import rdv.model.jsonViews.JsonViews;
 @Table(name = "consultation")
 @SequenceGenerator(name = "seqConsultation", sequenceName = "seq_consultation", allocationSize = 1, initialValue = 100)
 public class Consultation {
-	@JsonView(JsonViews.Common.class)
+	@JsonView(JsonViews.ConsultationWithPersonne.class)
 	@Embedded
 	private ConsultationPk key;
 	@Id
