@@ -57,6 +57,12 @@ public class CreneauRestController {
 		return findByKey(id);
 	}
 	
+	@JsonView(JsonViews.Common.class)
+	@GetMapping("/praticien/{id}")
+	public ResponseEntity<List<Creneau>> findAllCreneauWithIdPraticien(@PathVariable("id") Integer id) {
+		return new ResponseEntity<>(creneauRepository.findAllByIdPraticien(id), HttpStatus.OK);
+	}
+	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
 		Optional<Creneau> opt=creneauRepository.findById(id);
