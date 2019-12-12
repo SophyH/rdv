@@ -261,7 +261,7 @@ public class PersonneRestController {
 		return update(id, patient, br);
 	}
 
-	@PutMapping("praticien/{id}")
+	@PutMapping("/praticien/{id}")
 	public ResponseEntity<Void> updatePraticien(@PathVariable("id") Integer id, @Valid @RequestBody Praticien praticien,
 			BindingResult br) {
 		return update(id, praticien, br);
