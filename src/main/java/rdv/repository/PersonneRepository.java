@@ -19,6 +19,9 @@ public interface PersonneRepository extends JpaRepository<Personne, Integer> {
 	@Query("select p from Praticien p left join fetch p.login where p.id=:id")
 	public Optional<Praticien> findPraticienByIdWithLogin(@Param("id") Integer id);
 
+	@Query("select distinct p from Patient p left join fetch p.consultations.key.praticien pr where pr.id=:id")
+	public List<Patient> findAllPatientByIdPraticien(@Param("id") Integer id);
+
 	@Query("select p from Patient p left join fetch p.login where p.id=:id")
 	public Optional<Patient> findPatientByIdWithLogin(@Param("id") Integer id);
 
