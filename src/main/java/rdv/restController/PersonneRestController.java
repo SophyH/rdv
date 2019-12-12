@@ -39,7 +39,7 @@ import rdv.repository.PersonneRepository;
 import rdv.repository.PraticienAdresseRepository;
 
 @RestController
-@RequestMapping({ "/", "" })
+@RequestMapping("/inscrits")
 public class PersonneRestController {
 
 	@Autowired
@@ -58,7 +58,7 @@ public class PersonneRestController {
 	private AdresseRepository adresseRepository;
 
 	@JsonView(JsonViews.Common.class)
-	@GetMapping("/inscrits")
+	@GetMapping({ "", "/" })
 	public ResponseEntity<List<Personne>> findAll() {
 		return new ResponseEntity<>(personneRepository.findAll(), HttpStatus.OK);
 	}
@@ -82,13 +82,13 @@ public class PersonneRestController {
 	}
 
 	@JsonView(JsonViews.PersonneWithAll.class)
-	@GetMapping("inscrits/id/{id}")
+	@GetMapping("/id/{id}")
 	public ResponseEntity<Personne> findById(@PathVariable("id") Integer id) {
 		return findByKey(id);
 	}
 
 	@JsonView(JsonViews.PersonneWithAll.class)
-	@GetMapping("inscrits/{nom}")
+	@GetMapping("/{nom}")
 	public ResponseEntity<List<Personne>> findByNomWithAll(@PathVariable("nom") String nom) {
 		return findByName(nom);
 	}
@@ -161,7 +161,7 @@ public class PersonneRestController {
 		}
 	}
 
-	@DeleteMapping("inscrits/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
 		Optional<Personne> opt = personneRepository.findById(id);
 		if (opt.isPresent()) {
