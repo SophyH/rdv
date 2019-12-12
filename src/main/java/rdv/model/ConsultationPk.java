@@ -7,11 +7,17 @@ import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
+import rdv.model.jsonViews.JsonViews;
+
 @Embeddable
 public class ConsultationPk implements Serializable{
+	@JsonView(JsonViews.Common.class)
 	@ManyToOne
 	@JoinColumn(name = "id_patient_consultation", foreignKey = @ForeignKey(name = "consultation_patient_id_fk"))
 	private Patient patient;
+	@JsonView(JsonViews.Common.class)
 	@ManyToOne
 	@JoinColumn(name = "id_praticien_consultation", foreignKey = @ForeignKey(name = "consultation_praticien_id_fk"))
 	private Praticien praticien;

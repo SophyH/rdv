@@ -16,4 +16,7 @@ public interface AdresseRepository extends JpaRepository<Adresse, Integer> {
 	@Query("select a from Adresse a left join fetch a.praticienAdresses pa left join fetch pa.key.praticien")
 	public List<Adresse> findAllWithPraticien();
 
+	@Query("select distinct a from Adresse a left join fetch a.praticienAdresses pa left join fetch pa.key.praticien p where p.id = :id")
+	public List<Adresse> findAllByIdPraticien(@Param("id") Integer id);
+
 }

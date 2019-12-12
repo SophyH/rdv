@@ -10,6 +10,9 @@ public class JsonViews {
 	public static class PersonneWithAll extends Common {
 	};
 
+	public static class ConsultationWithPersonne extends Common {
+	};
+	
 	public static class AdresseWithPraticien extends PersonneWithAll {
 	};
 
@@ -31,6 +34,10 @@ public class JsonViews {
 
 	public static class UneDisponibilite extends Common {
 
+	};
+	
+	public static class SpecialiteWithPraticien extends Common{
+		
 	};
 
 }

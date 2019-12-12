@@ -23,82 +23,71 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import rdv.model.Adresse;
+import rdv.model.Specialite;
 import rdv.model.jsonViews.JsonViews;
-import rdv.repository.AdresseRepository;
+import rdv.repository.SpecialiteRepository;
 
 @CrossOrigin(origins = { "*" })
+@RequestMapping("/specialite")
 @RestController
-@RequestMapping("/adresse")
-public class AdresseRestController {
+public class SpecialiteRestController {
 
 	@Autowired
-	private AdresseRepository adresseRepository;
-
-	// pour remonter les adresses
-	@JsonView(JsonViews.Common.class)
-	@GetMapping({ "", "/" })
-	public ResponseEntity<List<Adresse>> findAll() {
-		return new ResponseEntity<>(adresseRepository.findAll(), HttpStatus.OK);
-	}
+	private SpecialiteRepository specialiteRepository;
 
 	@JsonView(JsonViews.Common.class)
-	@GetMapping("/praticien/{id}")
-	public ResponseEntity<List<Adresse>> findAllByIdPraticien(@PathVariable("id") Integer id) {
-		return new ResponseEntity<List<Adresse>>(adresseRepository.findAllByIdPraticien(id), HttpStatus.OK);
+	@GetMapping({ "", "/s" })
+	public ResponseEntity<List<Specialite>> findAll() {
+		return new ResponseEntity<List<Specialite>>(specialiteRepository.findAll(), HttpStatus.OK);
 	}
 
-	// pour remonter une seule adresse
 	@JsonView(JsonViews.Common.class)
 	@GetMapping("/{id}")
-	public ResponseEntity<Adresse> findById(@PathVariable("id") Integer id) {
-		Optional<Adresse> opt = adresseRepository.findById(id);
+	public ResponseEntity<Specialite> findById(@PathVariable("id") Integer id) {
+		Optional<Specialite> opt = specialiteRepository.findById(id);
 		if (opt.isPresent()) {
-			return new ResponseEntity<>(opt.get(), HttpStatus.OK);
+			return new ResponseEntity<Specialite>(opt.get(), HttpStatus.OK);
 		}
-		return new ResponseEntity<>(opt.get(), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<Specialite>(HttpStatus.NOT_FOUND);
 	}
 
-	// pour supprimer une adresse
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
-		Optional<Adresse> opt = adresseRepository.findById(id);
+		Optional<Specialite> opt = specialiteRepository.findById(id);
 		if (opt.isPresent()) {
-			adresseRepository.deleteById(id);
+			specialiteRepository.deleteById(id);
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 	}
 
-	// pour créer une adresse
 	@PostMapping({ "", "/" })
-	public ResponseEntity<Void> insert(@Valid @RequestBody Adresse adresse, BindingResult br,
-			UriComponentsBuilder uCB) {
+	public ResponseEntity<Specialite> insert(@Valid @PathVariable Specialite specialite, BindingResult br,
+			UriComponentsBuilder ucb) {
 		if (br.hasErrors()) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		adresseRepository.save(adresse);
+		specialiteRepository.save(specialite);
 		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(uCB.path("/adresse/{id}").buildAndExpand(adresse.getId()).toUri());
+		headers.setLocation(ucb.path("specialite/{id})").buildAndExpand(specialite.getId()).toUri());
 		return new ResponseEntity<>(headers, HttpStatus.CREATED);
 	}
-
-	// modifier une adresse
+	
+	@JsonView(JsonViews.SpecialiteWithPraticien.class)
 	@PutMapping("/{id}")
-	public ResponseEntity<Void> update(@PathVariable("id") Integer id, @Valid @RequestBody Adresse adresse,
-			BindingResult br) {
+	public ResponseEntity<Specialite> update(@PathVariable("id") Integer id, @Valid@RequestBody Specialite specialite, BindingResult br) {
 		if (br.hasErrors()) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		Optional<Adresse> opt = adresseRepository.findById(id);
-		if (!opt.isPresent()) {
+		Optional<Specialite> opt = specialiteRepository.findById(id);
+		if(!opt.isPresent()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		Adresse adresseEnBase = opt.get();
-		adresseEnBase.setAdresse(adresse.getAdresse());
-		adresseEnBase.setCodePostal(adresse.getCodePostal());
-		adresseEnBase.setVille(adresse.getVille());
-		adresseRepository.save(adresseEnBase);
+		Specialite specialitEnBase = opt.get();
+		specialitEnBase.setDuree(specialite.getDuree());
+		specialitEnBase.setPraticien(specialite.getPraticien());
+		specialitEnBase.setSpecialite(specialite.getSpecialite());
+		specialiteRepository.save(specialitEnBase);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 

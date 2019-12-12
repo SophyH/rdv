@@ -3,7 +3,7 @@ package rdv.model;
 import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -15,7 +15,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Version;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -23,15 +27,20 @@ import rdv.model.jsonViews.JsonViews;
 
 @Entity
 @Table(name = "consultation")
+@SequenceGenerator(name = "seqConsultation", sequenceName = "seq_consultation", allocationSize = 1, initialValue = 100)
 public class Consultation {
-	@JsonView(JsonViews.Common.class)
-	@EmbeddedId
+	@JsonView(JsonViews.ConsultationWithPersonne.class)
+	@Embedded
 	private ConsultationPk key;
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqConsultation")
 	@JsonView(JsonViews.Common.class)
-	@Column(name= "numero_consultation", nullable = false)
-	private Integer numeroConsultation;
+	@Column(name = "numero_consultation")
+	private Integer id;
 	@JsonView(JsonViews.Common.class)
 	@Column(name = "date_consultation")
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date date;
 	@JsonView(JsonViews.Common.class)
 	@Column(name = "motif_consultation")
@@ -43,64 +52,73 @@ public class Consultation {
 	@OneToOne
 	@JoinColumn(name = "creneau_id_consultation", foreignKey = @ForeignKey(name = "creneau_id_consultation_fk"))
 	private Creneau creneau;
-		
+
 	@Version
 	private int version;
-	
+
 	public Consultation() {
-		
+
 	}
-	
-	public Consultation(Integer numeroConsultation, Date date, String motif, Status status, Creneau creneau, int version) {
+
+	public Consultation(Integer numeroConsultation, Date date, String motif, Status status, Creneau creneau,
+			int version) {
 		super();
-		this.numeroConsultation = numeroConsultation;
+		this.id = numeroConsultation;
 		this.date = date;
 		this.motif = motif;
 		this.status = status;
 		this.creneau = creneau;
 		this.version = version;
 	}
-	
-	public Integer getNumeroConsultation() {
-		return numeroConsultation;
+
+	public Integer getId() {
+		return id;
 	}
 
-	public void setNumeroConsultation(Integer numeroConsultation) {
-		this.numeroConsultation = numeroConsultation;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public Date getDate() {
 		return date;
 	}
+
 	public void setDate(Date date) {
 		this.date = date;
 	}
+
 	public String getMotif() {
 		return motif;
 	}
+
 	public void setMotif(String motif) {
 		this.motif = motif;
 	}
+
 	public Status getStatus() {
 		return status;
 	}
+
 	public void setStatus(Status status) {
 		this.status = status;
 	}
+
 	public Creneau getCreneau() {
 		return creneau;
 	}
+
 	public void setCreneau(Creneau creneau) {
 		this.creneau = creneau;
 	}
-	
+
 	public int getVersion() {
 		return version;
 	}
+
 	public void setVersion(int version) {
 		this.version = version;
 	}
-	
+
 	public ConsultationPk getKey() {
 		return key;
 	}
@@ -133,5 +151,5 @@ public class Consultation {
 			return false;
 		return true;
 	}
-	
+
 }

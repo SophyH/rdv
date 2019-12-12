@@ -21,18 +21,30 @@ import javax.persistence.Version;
 import org.springframework.boot.convert.DurationFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import rdv.model.jsonViews.JsonViews;
+
 @Entity
 @Table(name = "specialite")
 @SequenceGenerator(name = "seqSpecialite", sequenceName = "seq_specialite", initialValue = 100, allocationSize = 5)
 public class Specialite {
+	@JsonView(JsonViews.Common.class)
 	@Id
 	@GeneratedValue(generator = "seqSpecialite", strategy = GenerationType.SEQUENCE)
 	@Column(name = "id_specialite")
 	private Integer id;
+	@JsonView(JsonViews.Common.class)
 	@Column(name = "specialite_specialite", length = 100)
 	private String specialite;
+	@JsonView(JsonViews.Common.class)
 	@Column(name = "duree_specialite", length = 100)
+	@JsonDeserialize(using = CustomerDateAndTimeDeserialize.class)
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(style = "HH:mm:ss")
 	private Date duree;
+	@JsonView(JsonViews.SpecialiteWithPraticien.class)
 	@ManyToOne
 	@JoinColumn(name = "praticien_id_specialite", foreignKey = @ForeignKey(name = "praticien_id_specialite_fk"))
 	private Praticien praticien;
