@@ -109,13 +109,13 @@ public class PersonneRestController {
 	@JsonView(JsonViews.PersonneWithAll.class)
 	@GetMapping("/praticiens")
 	public ResponseEntity<List<Praticien>> findAllPraticien() {
-		return new ResponseEntity<>(personneRepository.findAllPraticien(), HttpStatus.OK);
+		return new ResponseEntity<>(personneRepository.findAllPraticienWithAll(), HttpStatus.OK);
 	}
 
 	@JsonView(JsonViews.PersonneWithAll.class)
 	@GetMapping("/patients")
 	public ResponseEntity<List<Patient>> findAllPatient() {
-		return new ResponseEntity<>(personneRepository.findAllPatient(), HttpStatus.OK);
+		return new ResponseEntity<>(personneRepository.findAllPatientWithAll(), HttpStatus.OK);
 	}
 
 	@JsonView(PersonneWithAll.class)
